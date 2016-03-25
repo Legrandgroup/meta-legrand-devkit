@@ -1,0 +1,6 @@
+This repository is an Openembedded-Core/Yocto layer.
+It contains recipes for embedded utility not (yet) available inside the standard metas from OE-Core/Yocto.
+
+Layer maintainers:
+Nicolas Gillen <nicolas.gillen@legrand.fr>
+Lionel Ains <lionel.ains@legrand.fr>
