@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt	2016-03-25 15:11:05.729607176 +0100
++++ b/CMakeLists.txt	2016-03-25 15:11:34.633607007 +0100
+@@ -30,7 +30,7 @@
+     set(CPPCHECK_ARG_TEMPLATE   "--template=gcc")
+     # Useful compile flags and extra warnings 
+    #add_compile_options() is not supported with CMake 2.8.7 of Ubuntu 12.04 on Travis-CI    
+-    add_definitions(-fstack-protector -Wall -Winit-self -Wswitch-enum -Wshadow -Winline)
++    add_definitions(-Wall -Winit-self -Wswitch-enum -Wshadow -Winline)
+     if (CMAKE_COMPILER_IS_GNUCXX)
+         # GCC flags
+         if (SQLITECPP_USE_GCOV AND CMAKE_COMPILER_IS_GNUCXX)
