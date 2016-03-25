@@ -1,0 +1,43 @@
+commit 29c5e44bac6da17afd76bae6f597e270e5ded3d5
+Author: Louis Berryer <louis.berryer@legrand.fr>
+Date:   Mon Aug 24 15:19:15 2015 +0200
+
+    compilation done on windows side
+    
+    Signed-off-by: Louis Berryer <louis.berryer@legrand.fr>
+
+diff --git a/visual_studio/serial/serial.vcxproj b/visual_studio/serial/serial.vcxproj
+index eed1216..513aed0 100644
+--- a/visual_studio/serial/serial.vcxproj
++++ b/visual_studio/serial/serial.vcxproj
+@@ -28,7 +28,7 @@
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+-    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <ConfigurationType>DynamicLibrary</ConfigurationType>
+     <UseDebugLibraries>true</UseDebugLibraries>
+     <CharacterSet>MultiByte</CharacterSet>
+   </PropertyGroup>
+@@ -71,9 +71,13 @@
+       <WarningLevel>Level3</WarningLevel>
+       <Optimization>Disabled</Optimization>
+       <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>_USING_V110_SDK71_;%(PreprocessorDefinitions);BUILDING_LIBSERIAL</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
++      <SubSystem>
++      </SubSystem>
++      <AdditionalDependencies>Setupapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+     </Link>
+     <Lib>
+       <AdditionalDependencies>setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+@@ -138,6 +142,7 @@
+   <ItemGroup>
+     <ClInclude Include="..\..\include\serial\impl\win.h" />
+     <ClInclude Include="..\..\include\serial\serial.h" />
++    <ClInclude Include="..\..\include\serial\serial_api.h" />
+     <ClInclude Include="..\..\include\serial\v8stdint.h" />
+   </ItemGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
