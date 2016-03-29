@@ -9,9 +9,7 @@ DEPENDS = "sqlite3"
 
 inherit cmake
 
-SRCREV="${AUTOREV}"
-
-SRC_URI = "git://github.com/SRombauts/SQLiteCpp.git;protocol=http \
+SRC_URI = "git://github.com/SRombauts/SQLiteCpp.git;protocol=http;tag=${PV} \
 	 file://0001-install-dynamic-library.patch \
 	 file://0002-remove-stack-protector.patch \
 	 "
