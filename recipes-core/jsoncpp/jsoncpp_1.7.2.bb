@@ -8,8 +8,8 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=c56ee55c03a55f8105b969d8270632ce"
 SRC_URI = "https://github.com/open-source-parsers/jsoncpp/archive/${PV}.tar.gz \
 	 "
 
-SRC_URI[md5sum] = "f4cda66a1c4b6ab9427025026c578aa7"
-SRC_URI[sha256sum] = "0d83eb493d70daba95fe20f9e63b131eb56ed4e2e9013fc6093a54eddcc72236"
+SRC_URI[md5sum] = "3989402269147d1f853b57c542037536"
+SRC_URI[sha256sum] = "2179a7df19c1c6dc87e02c65b847efc914625a9b87df3e443d9610fc70c0f557"
 
 inherit cmake pkgconfig
 
@@ -21,6 +21,5 @@ EXTRA_OECMAKE = '-DBUILD_SHARED_LIBS=ON \
 
 BBCLASSEXTEND = "native"
 
-FILES_${PN} = "${libdir}/libjsoncpp.so.${PV} \
-	 ${libdir}/libjsoncpp.so.0 \
+FILES_${PN} = "${libdir}/libjsoncpp.so* \
 	 "
