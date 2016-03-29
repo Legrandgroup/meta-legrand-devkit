@@ -22,6 +22,11 @@ RPROVIDES_${PN}="libserialcpp.so"
 
 INHIBIT_PACKAGE_DEBUG_SPLIT="1"
 
+do_configure() {
+	rm -f "${S}"/CMakeLists.txt	# Remove cmake's files to force compilation using a normal Makefile
+	cp Makefile.linux-nocmake Makefile
+}
+
 do_install() {
 	install -d "${D}${libdir}"
 	install -m 0755 "${S}"/libserialcpp.so "${D}${libdir}"
