@@ -19,20 +19,21 @@ index eed1216..513aed0 100644
      <UseDebugLibraries>true</UseDebugLibraries>
      <CharacterSet>MultiByte</CharacterSet>
    </PropertyGroup>
-@@ -71,9 +71,13 @@
+@@ -70,9 +70,13 @@
+     <ClCompile>
        <WarningLevel>Level3</WarningLevel>
        <Optimization>Disabled</Optimization>
-       <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <AdditionalIncludeDirectories>..\..\..\serial\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>_USING_V110_SDK71_;%(PreprocessorDefinitions);BUILDING_LIBSERIAL</PreprocessorDefinitions>
      </ClCompile>
      <Link>
-       <GenerateDebugInformation>true</GenerateDebugInformation>
 +      <SubSystem>
 +      </SubSystem>
 +      <AdditionalDependencies>Setupapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <GenerateDebugInformation>true</GenerateDebugInformation>
      </Link>
      <Lib>
-       <AdditionalDependencies>setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
 @@ -138,6 +142,7 @@
    <ItemGroup>
      <ClInclude Include="..\..\include\serial\impl\win.h" />
