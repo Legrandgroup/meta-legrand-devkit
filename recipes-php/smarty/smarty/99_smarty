@@ -1,0 +1,3 @@
+d www www-data 0755 /var/volatile/www/configs none
+d www www-data 0755 /var/volatile/www/templates none
+d www www-data 0755 /var/volatile/www/templates_c none
