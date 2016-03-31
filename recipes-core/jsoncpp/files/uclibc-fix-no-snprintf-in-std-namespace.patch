@@ -1,0 +1,32 @@
+--- a/src/lib_json/json_reader.cpp	2016-03-31 12:39:53.825086015 +0200
++++ b/src/lib_json/json_reader.cpp	2016-03-31 12:41:11.449085563 +0200
+@@ -30,9 +30,13 @@
+ #elif defined(__ANDROID__) || defined(__QNXNTO__)
+ #define snprintf snprintf
+ #elif __cplusplus >= 201103L
+ #if !defined(__MINGW32__) && !defined(__CYGWIN__)
++#if !defined(__UCLIBC__)
+ #define snprintf std::snprintf
++#else
++#include <stdio.h>
++#endif
+ #endif
+ #endif
+ 
+ #if defined(__QNXNTO__)
+--- a/src/lib_json/json_writer.cpp	2016-03-31 12:42:53.905084966 +0200
++++ b/src/lib_json/json_writer.cpp	2016-03-31 12:43:28.965084762 +0200
+@@ -57,9 +57,13 @@
+ #elif defined(__ANDROID__) || defined(__QNXNTO__)
+ #define snprintf snprintf
+ #elif __cplusplus >= 201103L
+ #if !defined(__MINGW32__) && !defined(__CYGWIN__)
++#if !defined(__UCLIBC__)
+ #define snprintf std::snprintf
++#else
++#include <stdio.h>
++#endif
+ #endif
+ #endif
+ 
+ #if defined(__BORLANDC__)  

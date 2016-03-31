@@ -6,6 +6,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c56ee55c03a55f8105b969d8270632ce"
 
 SRC_URI = "https://github.com/open-source-parsers/jsoncpp/archive/${PV}.tar.gz \
+	 file://uclibc-fix-no-snprintf-in-std-namespace.patch \
 	 "
 
 SRC_URI[md5sum] = "3989402269147d1f853b57c542037536"
