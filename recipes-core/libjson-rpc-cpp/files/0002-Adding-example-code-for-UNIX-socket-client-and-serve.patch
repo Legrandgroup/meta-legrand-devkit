@@ -1,0 +1,145 @@
+From 6a6a857e58d18caf37611cd613947136aeb9052b Mon Sep 17 00:00:00 2001
+From: Lionel AINS <lionel.ains@legrand.fr>
+Date: Mon, 9 May 2016 15:53:43 +0200
+Subject: [PATCH 2/3] Adding example code for UNIX socket client and server
+
+---
+ src/examples/CMakeLists.txt             | 10 ++++++
+ src/examples/unixdomainsocketclient.cpp | 33 +++++++++++++++++
+ src/examples/unixdomainsocketserver.cpp | 63 +++++++++++++++++++++++++++++++++
+ 3 files changed, 106 insertions(+)
+ create mode 100644 src/examples/unixdomainsocketclient.cpp
+ create mode 100644 src/examples/unixdomainsocketserver.cpp
+
+diff --git a/src/examples/CMakeLists.txt b/src/examples/CMakeLists.txt
+index 779f42a..d79bf78 100644
+--- a/src/examples/CMakeLists.txt
++++ b/src/examples/CMakeLists.txt
+@@ -46,6 +46,16 @@ if(HTTP_CLIENT)
+     target_link_libraries(simpleclientsample jsonrpcclient)
+ endif()
+ 
++if(UNIX AND UNIX_DOMAIN_SOCKET_SERVER)
++        add_executable(unixdomainsocketserversample unixdomainsocketserver.cpp)
++        target_link_libraries(unixdomainsocketserversample jsonrpcserver)
++endif()
++
++if(UNIX AND UNIX_DOMAIN_SOCKET_CLIENT)
++        add_executable(unixdomainsocketclientsample unixdomainsocketclient.cpp)
++        target_link_libraries(unixdomainsocketclientsample jsonrpcclient)
++endif()
++
+ if (COMPILE_STUBGEN)
+     if(HTTP_CLIENT)
+             add_executable(stubclientsample stubclient.cpp ${CMAKE_BINARY_DIR}/gen/stubclient.h)
+diff --git a/src/examples/unixdomainsocketclient.cpp b/src/examples/unixdomainsocketclient.cpp
+new file mode 100644
+index 0000000..80ac0f4
+--- /dev/null
++++ b/src/examples/unixdomainsocketclient.cpp
+@@ -0,0 +1,33 @@
++/**
++ * @file unixdomainsocketclient.cpp
++ * @date 11.05.2015
++ * @author Alexandre Poirot <alexandre.poirot@legrand.fr>
++ * @brief unixdomainsocketclient.cpp
++ */
++
++#include <jsonrpccpp/client.h>
++#include <jsonrpccpp/client/connectors/unixdomainsocketclient.h>
++#include <iostream>
++
++using namespace jsonrpc;
++using namespace std;
++
++int main()
++{
++	UnixDomainSocketClient client("/tmp/unixdomainsocketexample");
++	Client c(client);
++
++	Json::Value params;
++	params["name"] = "Peter";
++
++	try
++	{
++		cout << c.CallMethod("sayHello", params) << endl;
++	}
++	catch (JsonRpcException& e)
++	{
++		cerr << e.what() << endl;
++	}
++
++
++}
+diff --git a/src/examples/unixdomainsocketserver.cpp b/src/examples/unixdomainsocketserver.cpp
+new file mode 100644
+index 0000000..04d694a
+--- /dev/null
++++ b/src/examples/unixdomainsocketserver.cpp
+@@ -0,0 +1,63 @@
++/**
++ * @file unixdomainsocketserver.cpp
++ * @date 11.05.2015
++ * @author Alexandre Poirot
++ * @brief unixdomainsocketserver.cpp
++ */
++
++#include <stdio.h>
++#include <string>
++#include <iostream>
++#include <jsonrpccpp/server.h>
++#include <jsonrpccpp/server/connectors/unixdomainsocketserver.h>
++
++
++using namespace jsonrpc;
++using namespace std;
++
++class SampleServer : public AbstractServer<SampleServer>
++{
++	public:
++		SampleServer(UnixDomainSocketServer &server) :
++			AbstractServer<SampleServer>(server)
++	{
++		this->bindAndAddMethod(Procedure("sayHello", PARAMS_BY_NAME, JSON_STRING, "name", JSON_STRING, NULL), &SampleServer::sayHello);
++		this->bindAndAddNotification(Procedure("notifyServer", PARAMS_BY_NAME, NULL), &SampleServer::notifyServer);
++	}
++
++		//method
++		void sayHello(const Json::Value& request, Json::Value& response)
++		{
++			response = "Hello: " + request["name"].asString();
++		}
++
++		//notification
++		void notifyServer(const Json::Value& request)
++		{
++			(void)request;
++			cout << "server received some Notification" << endl;
++		}
++};
++
++int main()
++{
++	try
++	{
++		UnixDomainSocketServer server("/tmp/unixdomainsocketexample");
++		SampleServer serv(server);
++		if (serv.StartListening())
++		{
++			cout << "Server started successfully" << endl;
++			getchar();
++			serv.StopListening();
++		}
++		else
++		{
++			cout << "Error starting Server" << endl;
++		}
++	}
++	catch (jsonrpc::JsonRpcException& e)
++	{
++		cerr << e.what() << endl;
++	}
++}
+-- 
+2.1.4
+

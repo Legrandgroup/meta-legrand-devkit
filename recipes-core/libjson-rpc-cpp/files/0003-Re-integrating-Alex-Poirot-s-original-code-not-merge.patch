@@ -1,0 +1,157 @@
+From ff5808c43488cf7855287885ee3fc3475f62b1b3 Mon Sep 17 00:00:00 2001
+From: Lionel AINS <lionel.ains@legrand.fr>
+Date: Mon, 9 May 2016 16:21:58 +0200
+Subject: [PATCH 3/3] Re-integrating Alex Poirot's original code not merged
+ upstream
+
+---
+ .../client/connectors/unixdomainsocketclient.cpp   | 10 +++--
+ .../server/connectors/unixdomainsocketserver.cpp   | 43 +++++++++++++++-------
+ 2 files changed, 36 insertions(+), 17 deletions(-)
+
+diff --git a/src/jsonrpccpp/client/connectors/unixdomainsocketclient.cpp b/src/jsonrpccpp/client/connectors/unixdomainsocketclient.cpp
+index 4e923e3..413e216 100644
+--- a/src/jsonrpccpp/client/connectors/unixdomainsocketclient.cpp
++++ b/src/jsonrpccpp/client/connectors/unixdomainsocketclient.cpp
+@@ -43,6 +43,10 @@ void UnixDomainSocketClient::SendRPCMessage(const std::string& message, std::str
+     int nbytes;
+     char buffer[BUFFER_SIZE];
+     socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
++    if (socket_fd < 0) {
++        cerr << "Socket failed" << endl;
++        throw JsonRpcException(Errors::ERROR_RPC_INTERNAL_ERROR, result);
++    }
+ 
+     memset(&address, 0, sizeof(sockaddr_un));
+ 
+@@ -54,10 +58,10 @@ void UnixDomainSocketClient::SendRPCMessage(const std::string& message, std::str
+     }
+ 
+     bool fullyWritten = false;
+-    string toSend = message + DELIMITER_CHAR;
++    string toSend = message;
+     do {
+         ssize_t byteWritten = write(socket_fd, toSend.c_str(), toSend.size());
+-        if(byteWritten < (ssize_t)toSend.size())
++        if(byteWritten < toSend.size())
+         {
+             int len = toSend.size() - byteWritten;
+             toSend = toSend.substr(byteWritten + sizeof(char), len);
+@@ -74,7 +78,5 @@ void UnixDomainSocketClient::SendRPCMessage(const std::string& message, std::str
+ 
+     } while(result.find(DELIMITER_CHAR) == string::npos);
+ 
+-    result = result.substr(0, result.size()-1);
+-
+     close(socket_fd);
+ }
+diff --git a/src/jsonrpccpp/server/connectors/unixdomainsocketserver.cpp b/src/jsonrpccpp/server/connectors/unixdomainsocketserver.cpp
+index cda8063..148e6e9 100644
+--- a/src/jsonrpccpp/server/connectors/unixdomainsocketserver.cpp
++++ b/src/jsonrpccpp/server/connectors/unixdomainsocketserver.cpp
+@@ -10,6 +10,7 @@
+ #include "unixdomainsocketserver.h"
+ #include <cstdlib>
+ #include <sstream>
++#include <iostream>
+ #include <sys/types.h>
+ #include <jsonrpccpp/common/specificationparser.h>
+ #include <cstdio>
+@@ -20,7 +21,7 @@
+ using namespace jsonrpc;
+ using namespace std;
+ 
+-#define BUFFER_SIZE 1024
++#define BUFFER_SIZE 64
+ #define PATH_MAX 108
+ #ifndef DELIMITER_CHAR
+     #define DELIMITER_CHAR char(0x0A)
+@@ -36,10 +37,16 @@ bool UnixDomainSocketServer::StartListening()
+ {
+ 	if(!this->running)
+ 	{
+-        if (access(this->socket_path.c_str(), F_OK) != -1)
++        //Create and bind socket here.
++        //Then launch the listenning loop.
++        this->socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
++        if(this->socket_fd < 0)
++        {
++            cerr << "socket() failed" << endl;
+             return false;
++        }
+ 
+-        this->socket_fd = socket(AF_UNIX, SOCK_STREAM, 0);
++        unlink(this->socket_path.c_str());
+ 
+         fcntl(this->socket_fd, F_SETFL, FNDELAY);
+ 
+@@ -48,10 +55,17 @@ bool UnixDomainSocketServer::StartListening()
+ 		this->address.sun_family = AF_UNIX;
+ 		snprintf(this->address.sun_path, PATH_MAX, "%s", this->socket_path.c_str());
+ 
+-        bind(this->socket_fd, reinterpret_cast<struct sockaddr *>(&(this->address)), sizeof(struct sockaddr_un));
+-
+-        listen(this->socket_fd, 5);
++        if(bind(this->socket_fd, reinterpret_cast<struct sockaddr *>(&(this->address)), sizeof(struct sockaddr_un)) != 0)
++        {
++            cerr << "bind() failed" << endl;
++            return false;
++        }
+ 
++        if(listen(this->socket_fd, 5) != 0)
++        {
++            cerr << "listen() failed" << endl;
++            return false;
++        }
+ 		//Launch listening loop there
+         this->running = true;
+         return (pthread_create(&(this->listenning_thread), NULL, UnixDomainSocketServer::LaunchLoop, this) == 0);
+@@ -95,6 +109,7 @@ bool UnixDomainSocketServer::SendResponse(const string& response, void* addInfo)
+ }
+ 
+ void* UnixDomainSocketServer::LaunchLoop(void *p_data) {
++	pthread_detach(pthread_self());
+ 	UnixDomainSocketServer *instance = reinterpret_cast<UnixDomainSocketServer*>(p_data);;
+ 	instance->ListenLoop();
+     return NULL;
+@@ -105,18 +120,22 @@ void UnixDomainSocketServer::ListenLoop() {
+ 	socklen_t address_length = sizeof(this->address);
+     while(this->running)
+ 	{
+-        connection_fd = accept(this->socket_fd, (struct sockaddr *) &(this->address),  &address_length);
+-        if (connection_fd > 0)
++        if((connection_fd = accept(this->socket_fd, reinterpret_cast<struct sockaddr *>(&(this->address)),  &address_length)) > 0)
+         {
+             pthread_t client_thread;
+             struct ClientConnection *params = new struct ClientConnection();
+             params->instance = this;
+             params->connection_fd = connection_fd;
+-            pthread_create(&client_thread, NULL, UnixDomainSocketServer::GenerateResponse, params);
++            int ret = pthread_create(&client_thread, NULL, UnixDomainSocketServer::GenerateResponse, params);
++            if(ret != 0) {
++                pthread_detach(client_thread);
++                delete params;
++                params = NULL;
++            }
+         }
+         else
+         {
+-            usleep(25000);
++            usleep(2500);
+         }
+ 
+ 	}
+@@ -136,9 +155,7 @@ void* UnixDomainSocketServer::GenerateResponse(void *p_data) {
+ 		nbytes = read(connection_fd, buffer, BUFFER_SIZE);
+ 		request.append(buffer,nbytes);
+ 	} while(request.find(DELIMITER_CHAR) == string::npos);
+-
+-    instance->OnRequest(request.substr(0, request.size()-1), reinterpret_cast<void*>(connection_fd));
+-    pthread_exit(NULL);
++    instance->OnRequest(request, reinterpret_cast<void*>(connection_fd));
+     return NULL;
+ }
+ 
+-- 
+2.1.4
+
