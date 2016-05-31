@@ -1,0 +1,11 @@
+--- a/Makefile.am	2016-05-30 17:20:35.765274991 +0200
++++ b/Makefile.am	2016-05-30 17:20:44.465275206 +0200
+@@ -10,7 +10,7 @@
+ 
+ ACLOCAL_AMFLAGS= 
+ 
+-SUBDIRS = cgicc doc support $(DEMO)
++SUBDIRS = cgicc support $(DEMO)
+ 
+ CLEANFILES = *~
+ 

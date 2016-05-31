@@ -1,0 +1,34 @@
+diff -urN cgicc-ref/cgicc/CgiEnvironment.cpp cgicc-dev/cgicc/CgiEnvironment.cpp
+--- cgicc-ref/cgicc/CgiEnvironment.cpp	2014-12-07 15:28:30.000000000 +0100
++++ cgicc-dev/cgicc/CgiEnvironment.cpp	2016-03-23 01:05:59.924915285 +0100
+@@ -260,6 +260,8 @@
+   fReferrer 		= input->getenv("HTTP_REFERER");
+   fCookie 		= input->getenv("HTTP_COOKIE");
+   fAcceptLanguageString = input->getenv("HTTP_ACCEPT_LANGUAGE"); 
++  
++  fOrigin               = input->getenv("HTTP_ORIGIN");
+ 
+   // Win32 bug fix by Peter Goedtkindt 
+   std::string https 	= input->getenv("HTTPS");
+diff -urN cgicc-ref/cgicc/CgiEnvironment.h cgicc-dev/cgicc/CgiEnvironment.h
+--- cgicc-ref/cgicc/CgiEnvironment.h	2014-04-23 22:55:03.000000000 +0200
++++ cgicc-dev/cgicc/CgiEnvironment.h	2016-03-23 01:07:24.536917089 +0100
+@@ -500,6 +500,10 @@
+     { return fRedirectStatus; }
+     //@}
+     
++    inline std::string
++    getOrigin()					const
++    { return fOrigin; }
++    
+   protected:
+     
+     // ============================================================
+@@ -573,6 +577,7 @@
+     std::string 		fCookie;
+     std::vector<HTTPCookie> 	fCookies;
+     std::string                 fAcceptLanguageString; 
++    std::string                 fOrigin;
+   };
+   
+ } // namespace cgicc
