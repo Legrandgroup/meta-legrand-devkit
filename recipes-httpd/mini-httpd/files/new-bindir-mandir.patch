@@ -1,0 +1,14 @@
+--- mini_httpd-1.24/Makefile
++++ mini_httpd-1.24/Makefile
+@@ -20,8 +20,8 @@ CRYPT_LIB =    -lcrypt
+ #SSL_LIBS =	-L${SSL_TREE}/lib -lssl -lcrypto
+ 
+ 
+-BINDIR =	/usr/local/sbin
+-MANDIR =	/usr/local/man
++BINDIR =	/usr/sbin
++MANDIR =	/usr/share/man
+ CC =		cc
+ CDEFS =		$(SSL_DEFS) $(SSL_INC)
+ CFLAGS =	-O $(CDEFS) -ansi -pedantic -U__STRICT_ANSI__ -Wall -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wno-long-long
+
