@@ -2,7 +2,7 @@ SUMMARY = "C++ framework for json-rpc (json remote procedure call)"
 SECTION = "lib"
 HOMEPAGE = "https://github.com/cinemast/libjson-rpc-cpp"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=f1b1426570d897385522252fef4572b0"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;beginline=2;md5=495acfc0327bba6d760e33900e1e1465"
 
 RDEPENDS_${PN} = "jsoncpp"
 DEPENDS = "jsoncpp"
