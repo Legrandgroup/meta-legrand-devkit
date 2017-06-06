@@ -7,15 +7,14 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;beginline=2;md5=495acfc0327bba6d760e33900
 RDEPENDS_${PN} = "jsoncpp"
 DEPENDS = "jsoncpp"
 
-SRCREV="4066b2b376826ca16aad7e2b6d2ee457ed406869"
+SRC_URI[md5sum] = "6f17018d2f09227ad2855b48e4b7a844"
+SRC_URI[sha256sum] = "669c2259909f11a8c196923a910f9a16a8225ecc14e6c30e2bcb712bab9097eb"
 
-SRC_URI = "git://github.com/cinemast/libjson-rpc-cpp.git;protocol=http \
+SRC_URI = "https://github.com/cinemast/libjson-rpc-cpp/archive/v${PV}.tar.gz \
 	 file://0001-Adding-support-for-pkg-config.patch \
-	 file://0002-Adding-example-code-for-UNIX-socket-client-and-serve.patch \
-	 file://0003-Re-integrating-Alex-Poirot-s-original-code-not-merge.patch \
 	 "
 
-S = "${WORKDIR}/git/"
+S = "${WORKDIR}/libjson-rpc-cpp-${PV}"
 
 inherit cmake pkgconfig
 
