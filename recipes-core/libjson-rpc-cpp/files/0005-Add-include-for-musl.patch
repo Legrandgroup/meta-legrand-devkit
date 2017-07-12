@@ -1,0 +1,10 @@
+--- a/src/jsonrpccpp/server/connectors/unixdomainsocketserver.cpp	2017-07-11 16:26:59.410315963 +0200
++++ b/src/jsonrpccpp/server/connectors/unixdomainsocketserver.cpp	2017-07-11 16:27:20.578316149 +0200
+@@ -17,6 +17,7 @@
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <string>
++#include <cstring>
+ 
+ using namespace jsonrpc;
+ using namespace std;

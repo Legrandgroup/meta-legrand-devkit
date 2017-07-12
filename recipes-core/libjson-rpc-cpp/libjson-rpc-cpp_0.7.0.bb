@@ -12,6 +12,7 @@ SRC_URI[sha256sum] = "669c2259909f11a8c196923a910f9a16a8225ecc14e6c30e2bcb712bab
 
 SRC_URI = "https://github.com/cinemast/libjson-rpc-cpp/archive/v${PV}.tar.gz \
 	 file://0001-Adding-support-for-pkg-config.patch \
+	 file://0005-Add-include-for-musl.patch \
 	 "
 
 S = "${WORKDIR}/libjson-rpc-cpp-${PV}"
