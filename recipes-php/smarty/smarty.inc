@@ -6,6 +6,7 @@ SECTION = "net"
 
 PR = "r1"
 
+DIRFILES = "1"
 SRC_URI = "file://99_smarty"
 
 inherit useradd
