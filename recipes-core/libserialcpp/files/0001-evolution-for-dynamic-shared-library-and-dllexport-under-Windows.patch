@@ -13,7 +13,7 @@ index 0000000..acac5f2
 +CXXFLAGS = -g -O0 -Wall -fPIC -pedantic -Iinclude
 +LDFLAGS = 
 +
-+EXEC = libserialcpp.so
++EXEC = libserial.so
 +OBJECTFILES = src/serial.o \
 +	src/impl/unix.o src/impl/list_ports/list_ports_linux.o
 +
