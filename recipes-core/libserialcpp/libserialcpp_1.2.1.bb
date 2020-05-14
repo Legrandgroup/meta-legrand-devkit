@@ -18,7 +18,7 @@ SRC_URI[sha256sum] = "0c2a789ce485a83ed640c777a7d1cd1256976890ece4c126f93751a086
 
 CXXFLAGS += " -Iinclude -fPIC -pedantic"
 
-RPROVIDES_${PN}="libserialcpp.so"
+RPROVIDES_${PN}="libserial.so"
 
 INHIBIT_PACKAGE_DEBUG_SPLIT="1"
 
@@ -29,7 +29,7 @@ do_configure() {
 
 do_install() {
 	install -d "${D}${libdir}"
-	install -m 0755 "${S}"/libserialcpp.so "${D}${libdir}"
+	install -m 0755 "${S}"/libserial.so "${D}${libdir}"
 	
 	install -d "${D}${includedir}"/serial
 	install -d "${D}${includedir}"/serial/impl
@@ -39,7 +39,7 @@ do_install() {
 	install -m 0755 "${S}"/include/serial/impl/unix.h "${D}${includedir}"/serial/impl/
 }
 
-FILES_${PN} = "${libdir}/libserialcpp.so \
+FILES_${PN} = "${libdir}/libserial.so \
 	"
 
 FILES_${PN}-dev = "${includedir}/serial/serial.h \

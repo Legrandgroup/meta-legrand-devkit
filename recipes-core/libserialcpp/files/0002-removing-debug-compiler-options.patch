@@ -13,4 +13,4 @@ index acac5f2..1f6b2a5 100644
 +CXXFLAGS = -O3 -Wall -fPIC -pedantic -Iinclude
  LDFLAGS = 
  
- EXEC = libserialcpp.so
+ EXEC = libserial.so
