@@ -1,21 +1,12 @@
-commit 3ce214ddb7afb10f6a4b2d22337293f91086c747
-Author: Louis Berryer <louis.berryer@legrand.fr>
-Date:   Mon Aug 24 14:41:20 2015 +0200
-
-    Evolution for dynamic shared library and dllexport under Windows
-
-diff --git a/Makefile.linux-nocmake b/Makefile.linux-nocmake
-new file mode 100644
-index 0000000..acac5f2
---- /dev/null
-+++ b/Makefile.linux-nocmake
+--- /dev/null	2020-06-09 09:57:24.381799695 +0200
++++ b/Makefile.linux-nocmake	2020-06-09 16:11:08.001489615 +0200
 @@ -0,0 +1,19 @@
-+CXXFLAGS = -g -O0 -Wall -fPIC -pedantic -Iinclude
++CXXFLAGS = -O3 -Wall -fPIC -pedantic -Iinclude
 +LDFLAGS = 
 +
 +EXEC = libserial.so
 +OBJECTFILES = src/serial.o \
-+	src/impl/unix.o src/impl/list_ports/list_ports_linux.o
++	      src/impl/unix.o src/impl/list_ports/list_ports_linux.o
 +
 +CLEANFILES = $(OBJECTFILES) $(EXEC)
 +
@@ -29,10 +20,8 @@ index 0000000..acac5f2
 +
 +clean:
 +	rm -f $(CLEANFILES)
-diff --git a/include/serial/serial.h b/include/serial/serial.h
-index 82dc299..b161460 100644
---- a/include/serial/serial.h
-+++ b/include/serial/serial.h
+--- a/include/serial/serial.h	2020-06-09 15:56:50.821501468 +0200
++++ b/include/serial/serial.h	2020-06-09 16:06:56.085493098 +0200
 @@ -44,6 +44,7 @@
  #include <exception>
  #include <stdexcept>
@@ -41,7 +30,7 @@ index 82dc299..b161460 100644
  
  #define THROW(exceptionClass, message) throw exceptionClass(__FILE__, \
  __LINE__, (message) )
-@@ -53,7 +54,7 @@ namespace serial {
+@@ -53,7 +54,7 @@
  /*!
   * Enumeration defines the possible bytesizes for the serial port.
   */
@@ -50,7 +39,7 @@ index 82dc299..b161460 100644
    fivebits = 5,
    sixbits = 6,
    sevenbits = 7,
-@@ -63,7 +64,7 @@ typedef enum {
+@@ -63,7 +64,7 @@
  /*!
   * Enumeration defines the possible parity types for the serial port.
   */
@@ -59,7 +48,7 @@ index 82dc299..b161460 100644
    parity_none = 0,
    parity_odd = 1,
    parity_even = 2,
-@@ -74,7 +75,7 @@ typedef enum {
+@@ -74,7 +75,7 @@
  /*!
   * Enumeration defines the possible stopbit types for the serial port.
   */
@@ -68,7 +57,7 @@ index 82dc299..b161460 100644
    stopbits_one = 1,
    stopbits_two = 2,
    stopbits_one_point_five
-@@ -83,7 +84,7 @@ typedef enum {
+@@ -83,7 +84,7 @@
  /*!
   * Enumeration defines the possible flowcontrol types for the serial port.
   */
@@ -77,7 +66,7 @@ index 82dc299..b161460 100644
    flowcontrol_none = 0,
    flowcontrol_software,
    flowcontrol_hardware
-@@ -99,7 +100,7 @@ struct Timeout {
+@@ -99,7 +100,7 @@
  #ifdef max
  # undef max
  #endif
@@ -86,7 +75,7 @@ index 82dc299..b161460 100644
    /*!
     * Convenience function to generate Timeout structs using a
     * single absolute timeout.
-@@ -109,7 +110,7 @@ struct Timeout {
+@@ -109,7 +110,7 @@
     *
     * \return Timeout struct that represents this simple timeout provided.
     */
@@ -95,7 +84,7 @@ index 82dc299..b161460 100644
      return Timeout(max(), timeout, 0, timeout, 0);
    }
  
-@@ -128,7 +129,7 @@ struct Timeout {
+@@ -128,7 +129,7 @@
     */
    uint32_t write_timeout_multiplier;
  
@@ -104,7 +93,7 @@ index 82dc299..b161460 100644
                      uint32_t read_timeout_constant_=0,
                      uint32_t read_timeout_multiplier_=0,
                      uint32_t write_timeout_constant_=0,
-@@ -144,7 +145,7 @@ struct Timeout {
+@@ -144,7 +145,7 @@
  /*!
   * Class that provides a portable serial port interface.
   */
@@ -113,7 +102,7 @@ index 82dc299..b161460 100644
  public:
    /*!
     * Creates a Serial object and opens the port if a port is specified,
-@@ -667,7 +668,7 @@ private:
+@@ -669,7 +670,7 @@
  
  };
  
@@ -122,7 +111,7 @@ index 82dc299..b161460 100644
  {
    // Disable copy constructors
    SerialException& operator=(const SerialException&);
-@@ -685,7 +686,7 @@ public:
+@@ -687,7 +688,7 @@
    }
  };
  
@@ -131,7 +120,7 @@ index 82dc299..b161460 100644
  {
    // Disable copy constructors
    IOException& operator=(const IOException&);
-@@ -724,7 +725,7 @@ public:
+@@ -726,7 +727,7 @@
    }
  };
  
@@ -140,7 +129,7 @@ index 82dc299..b161460 100644
  {
    // Disable copy constructors
    const PortNotOpenedException& operator=(PortNotOpenedException);
-@@ -766,7 +767,7 @@ struct PortInfo {
+@@ -768,7 +769,7 @@
   * \return vector of serial::PortInfo.
   */
  std::vector<PortInfo>
@@ -149,25 +138,22 @@ index 82dc299..b161460 100644
  
  } // namespace serial
  
-diff --git a/include/serial/serial_api.h b/include/serial/serial_api.h
-new file mode 100644
-index 0000000..71a006f
---- /dev/null
-+++ b/include/serial/serial_api.h
+--- /dev/null	2020-06-09 09:57:24.381799695 +0200
++++ b/include/serial/serial_api.h	2020-06-09 16:09:43.897490778 +0200
 @@ -0,0 +1,37 @@
 +/**
-+* \file dbmanagerapi.hpp
++* \file serial_api.h
 +* \brief Preprocessor defines (class prefixes) to compile DLLs under Windows
 +*
-+* This header must be included to properly define LIBDBMANAGER_API in the remaining API headers
++* This header must be included to properly define LIBSERIAL_API in the remaining API headers
 +*/
 +
-+#ifndef _SERIALAPI_HPP_
-+#define _SERIALAPI_HPP_
++#ifndef _SERIALAPI_H_
++#define _SERIALAPI_H_
 +
 +#if !defined(LIBSERIAL_STATICLIB)
 +#if defined(BUILDING_LIBSERIAL)
-+#if   (defined(__MINGW32__) || defined(__MINGW64__))
++#if (defined(__MINGW32__) || defined(__MINGW64__))
 +#define LIBSERIAL_API
 +#elif (defined(WIN32) || defined(_WIN32))
 +#define LIBSERIAL_API  __declspec(dllexport)
@@ -178,7 +164,7 @@ index 0000000..71a006f
 +#define LIBSERIAL_LIB_EXPORT
 +#undef LIBSERIAL_LIB_IMPORT
 +#else
-+#if   (defined(__MINGW32__) || defined(__MINGW64__))
++#if (defined(__MINGW32__) || defined(__MINGW64__))
 +#define LIBSERIAL_API
 +#elif (defined(WIN32) || defined(_WIN32))
 +#define LIBSERIAL_API  __declspec(dllimport)
@@ -191,5 +177,4 @@ index 0000000..71a006f
 +#endif
 +#endif
 +
-+#endif	// _SERIALAPI_HPP_
-\ No newline at end of file
++#endif	// _SERIALAPI_H_

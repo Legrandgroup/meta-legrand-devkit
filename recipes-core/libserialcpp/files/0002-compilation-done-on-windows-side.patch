@@ -1,16 +1,6 @@
-commit 29c5e44bac6da17afd76bae6f597e270e5ded3d5
-Author: Louis Berryer <louis.berryer@legrand.fr>
-Date:   Mon Aug 24 15:19:15 2015 +0200
-
-    compilation done on windows side
-    
-    Signed-off-by: Louis Berryer <louis.berryer@legrand.fr>
-
-diff --git a/visual_studio/serial/serial.vcxproj b/visual_studio/serial/serial.vcxproj
-index eed1216..513aed0 100644
---- a/visual_studio/serial/serial.vcxproj
-+++ b/visual_studio/serial/serial.vcxproj
-@@ -28,7 +28,7 @@
+--- a/visual_studio/serial/serial.vcxproj	2020-06-09 16:16:27.177485201 +0200
++++ b/visual_studio/serial/serial.vcxproj	2020-06-09 16:20:06.253482171 +0200
+@@ -29,7 +29,7 @@
    </PropertyGroup>
    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -19,11 +9,11 @@ index eed1216..513aed0 100644
      <UseDebugLibraries>true</UseDebugLibraries>
      <CharacterSet>MultiByte</CharacterSet>
    </PropertyGroup>
-@@ -70,9 +70,13 @@
+@@ -71,9 +71,13 @@
      <ClCompile>
        <WarningLevel>Level3</WarningLevel>
        <Optimization>Disabled</Optimization>
--      <AdditionalIncludeDirectories>..\..\..\serial\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <PreprocessorDefinitions>_USING_V110_SDK71_;%(PreprocessorDefinitions);BUILDING_LIBSERIAL</PreprocessorDefinitions>
      </ClCompile>
@@ -34,7 +24,7 @@ index eed1216..513aed0 100644
        <GenerateDebugInformation>true</GenerateDebugInformation>
      </Link>
      <Lib>
-@@ -138,6 +142,7 @@
+@@ -139,6 +143,7 @@
    <ItemGroup>
      <ClInclude Include="..\..\include\serial\impl\win.h" />
      <ClInclude Include="..\..\include\serial\serial.h" />
