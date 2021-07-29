@@ -5,7 +5,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://README.md;beginline=59;endline=65;md5=c3da3fd95b8eba82c3e7d97c7b91d462"
 AUTHOR="Nicolas Gillen <nicolas.gillen@legrand.fr>"
 
-SRC_URI = "git://github.com/wjwwood/serial.git;branch=master \
+SRC_URI = "git://github.com/wjwwood/serial.git;branch=main \
            file://0001-evolution-for-dynamic-shared-library-and-dllexport-under-Windows.patch \
            file://0002-compilation-done-on-windows-side.patch \
            "
