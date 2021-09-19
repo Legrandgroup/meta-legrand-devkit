@@ -1,0 +1,9 @@
+--- a/CMakeLists.txt	2021-09-07 21:50:11.727581402 +0200
++++ b/CMakeLists.txt	2021-09-07 21:51:00.636352378 +0200
+@@ -439,4 +439,5 @@
+ endif (SQLITECPP_BUILD_TESTS)
+ 
+ # API version for SQLiteCpp shared library.
+-set_property(TARGET SQLiteCpp PROPERTY SOVERSION 0)
++set_property(TARGET SQLiteCpp PROPERTY VERSION 3.1.1)
++set_property(TARGET SQLiteCpp PROPERTY SOVERSION 3)

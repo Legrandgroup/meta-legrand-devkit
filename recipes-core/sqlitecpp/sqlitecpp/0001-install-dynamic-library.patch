@@ -1,22 +1,13 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index a410bc8..8583755 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -132,13 +132,15 @@ source_group(scripts FILES ${SQLITECPP_SCRIPT})
- # All includes are relative to the "include" directory 
- include_directories("${PROJECT_SOURCE_DIR}/include")
+--- a/CMakeLists.txt	2021-09-07 16:36:53.002660070 +0200
++++ b/CMakeLists.txt	2021-09-07 16:37:39.359384754 +0200
+@@ -170,8 +170,8 @@
+ )
+ source_group(scripts FILES ${SQLITECPP_SCRIPT})
  
 -# add sources of the wrapper as a "SQLiteCpp" static library
 -add_library(SQLiteCpp ${SQLITECPP_SRC} ${SQLITECPP_INC} ${SQLITECPP_DOC} ${SQLITECPP_SCRIPT})
 +# add sources of the wrapper as a "SQLiteCpp" dynamic library
 +add_library(SQLiteCpp SHARED ${SQLITECPP_SRC} ${SQLITECPP_INC} ${SQLITECPP_DOC} ${SQLITECPP_SCRIPT})
  
- if (UNIX AND (CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang"))
-     set_target_properties(SQLiteCpp PROPERTIES COMPILE_FLAGS "-fPIC")
- endif (UNIX AND (CMAKE_COMPILER_IS_GNUCXX OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang"))
- 
-+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/SQLiteCpp DESTINATION include)
-+install(TARGETS SQLiteCpp LIBRARY DESTINATION lib)
- 
- ## Build provided copy of SQLite3 C library ##
+ # Options relative to SQLite and SQLiteC++ functions
  

@@ -1,7 +1,7 @@
 DESCRIPTION = "C++ Wrapper for SQLite3."
 SECTION = "lib"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=8381f808d103b22849717cbb555b184b"
+LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=a6abb8f9ddcf3b84c6995c2de97a2f1c"
 
 PR = "r0"
 
@@ -11,7 +11,7 @@ inherit cmake
 
 SRC_URI = "git://github.com/SRombauts/SQLiteCpp.git;protocol=http;tag=${PV} \
 	 file://0001-install-dynamic-library.patch \
-	 file://0002-remove-stack-protector.patch \
+	 file://0002-add-version-and-change-soversion.patch \
 	 "
 
 S = "${WORKDIR}/git/"
@@ -38,6 +38,6 @@ EOF
 }
 
 PACKAGES = "${PN} ${PN}-dev ${PN}-dbg"
-FILES_${PN} = "${libdir}/*.so*"
-FILES_${PN}-dev = "${includedir}/SQLiteCpp/* ${libdir}/pkgconfig/*.pc"
-#FILES_${PN}-staticdev = "${libdir}/*.a ${libdir}/*.la"
+FILES_${PN} = "${libdir}/*.so.*"
+FILES_${PN}-dev = "${includedir}/SQLiteCpp/* ${libdir}/*.so ${libdir}/pkgconfig/*.pc ${libdir}/cmake/* "
+FILES_${PN}-dbg = "${libdir}/.debug/*"
